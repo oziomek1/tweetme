@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+            {% if not request.GET.q %}
+             <div class='row'>
+                 <div class='col-sm-8 text-center'>
+                    {% include "tweets/form.html" with form=create_form action_url=create_url btn_title='Tweet' %}
+                 </div>
+             </div>
+            {% endif %}
+    {% for obj in object_list %}
+    <div class='row'>
+        <div class="col-sm-3 col-xs-12" style="background-color:#0275d8;">
+            <h3>{{ obj.user }}</h3>
+        </div>
+        <div class='col-sm-8'>
+            {{obj.title}}</br>
+            {{obj.text}}</br>
+            by <b>{{obj.user}}</b> | {{obj.updated|timesince}} ago |
+            <a href="{{ obj.get_absolute_url }}">View</a>
+        </div>
+        <div class="col-sm-12">
+            <hr/>
+        </div>
+    </div>
+    {% empty %}
+                {% if request.GET.q %}
+                <p>No tweets found.</p>
+                {% else %}
+                <p>No tweets yet.</p>
+                {% endif %}
+    {% endfor %}
+{% endblock content %}

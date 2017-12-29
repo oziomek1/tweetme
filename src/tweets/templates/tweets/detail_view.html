@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %} See Tweet | {{block.super}} {% endblock title %}
+
+{% block content %}
+
+    {{ object.title }}<br/>
+    {{ object.text }}<br/>
+    {{ object.timestamp }} <br/>
+    {{ object.timestamp | timesince }} ago
+
+{% endblock content %}
