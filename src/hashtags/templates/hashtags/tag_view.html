@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class='row'>
+    <div class="col-sm-3 col-xs-12 text-center">
+        <div style="background-color:#fc0;">
+            <h1>{{ obj.tag }}</h1>
+        </div>
+    </div>
+    <div class='col-sm-9'>
+
+        {% for tweet in obj.get_tweets %}
+        {{ tweet.title }} <br/> {{ tweet.text }} <hr/>
+        {% endfor %}
+
+    </div>
+</div>
+{% endblock content %}

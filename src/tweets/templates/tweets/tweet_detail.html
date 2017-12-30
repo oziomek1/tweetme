@@ -2,12 +2,14 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-sm-3 col-xs-12" style="background-color:red;">
-        <h3>{{ object.user }}</h3>
+    <div class="col-sm-3 col-xs-12 text-center">
+        <div style="background-color:#fc0;">
+            <h1>{{ object.user }}</h1>
+        </div>
     </div>
     <div class="col-sm-9 col-xs-12">
-        <b>{{ object.text }}</b></br>
-        {{ object.title }}<br/>
+        <b>{{ object.title }}</b></br>
+        {{ object.text }}<br/>
         Posted: {{ object.timestamp | timesince }} ago
     </div>
 

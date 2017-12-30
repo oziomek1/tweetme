@@ -16,20 +16,28 @@ Including another URLconf
 import os
 import sys
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../tweets'))
-print(str(os.path.abspath(os.path.dirname(__file__) + '/' + '../')))
+sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../hashtags'))
+# print(str(os.path.abspath(os.path.dirname(__file__) + '/' + '../')))
 from django.contrib import admin
 from django.urls import path, include
 
 from django.conf import settings
 from django.conf.urls.static import static
 
+from hashtags.views import HashTagView
 from tweets.views import TweetListView
 from .views import home
 
+app_name = 'tweetme'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TweetListView.as_view(), name='home'),
     path('tweet/', include('tweets.urls', namespace='tweet')),
+    path('api/tweet/', include('tweets.api.urls', namespace='tweet-api')),
+    path('', include('accounts.urls', namespace='profiles')),
+    path('api/', include('accounts.api.urls', namespace='profiles-api')),
+    path('tags/<hashtag>/', HashTagView.as_view(), name='hashtag'),
+    # path('api/profiles/', include('accounts.api.urls', namespace='profiles-api')),
 ]
 
 if settings.DEBUG:
