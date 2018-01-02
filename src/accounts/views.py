@@ -3,10 +3,26 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.contrib.auth import get_user_model
+from .forms import UserRegisterForm
 
 from .models import UserProfile
 # Create your views here.
 User = get_user_model()
+
+
+class UserRegisterView(generic.FormView):
+    form_class = UserRegisterForm
+    template_name = 'accounts/user_register_form.html'
+    success_url = '/login'
+
+    def form_valid(self, form):
+        username = form.cleaned_data.get('username')
+        email = form.cleaned_data.get('email')
+        password = form.cleaned_data.get('password')
+        new_user = User.objects.create(username=username, email=email)
+        new_user.set_password(password)
+        new_user.save()
+        return super(UserRegisterView, self).form_valid(form)
 
 
 class UserDetailView(generic.DetailView):
@@ -23,6 +39,7 @@ class UserDetailView(generic.DetailView):
         context = super(UserDetailView, self).get_context_data(*args, **kwargs)
         following = UserProfile.objects.is_following(self.request.user, self.get_object())
         context['following'] = following
+        context['recommended'] = UserProfile.objects.recommended(self.request.user)
         return context
 
 

@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
@@ -33,7 +34,7 @@ class TweetDetailView(generic.DetailView):
     queryset = Tweet.objects.all()
 
 
-class TweetListView(generic.ListView):
+class TweetListView(LoginRequiredMixin, generic.ListView):
     queryset = Tweet.objects.all()
 
     def get_queryset(self, *args, **kwargs):

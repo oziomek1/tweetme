@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 
+{% block script %}
+<script>
+$(document).ready(function(){
+    loadTweetContainer("tweet-container", {{object.id}})
+});
+</script>
+{% endblock script %}
+
 {% block content %}
 <div class="row">
     <div class="col-sm-3 col-xs-12 text-center">
@@ -8,9 +16,11 @@
         </div>
     </div>
     <div class="col-sm-9 col-xs-12">
-        <b>{{ object.title }}</b></br>
+        <div id='tweet-container'>
+        </div>
+        <!-- <b>{{ object.title }}</b></br>
         {{ object.text }}<br/>
-        Posted: {{ object.timestamp | timesince }} ago
+        Posted: {{ object.timestamp | timesince }} ago -->
     </div>
 
 </div>

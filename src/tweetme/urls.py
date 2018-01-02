@@ -15,6 +15,7 @@ Including another URLconf
 """
 import os
 import sys
+sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../tweets/api'))
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../tweets'))
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../hashtags'))
 # print(str(os.path.abspath(os.path.dirname(__file__) + '/' + '../')))
@@ -24,19 +25,28 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from accounts.views import UserRegisterView
+
 from hashtags.views import HashTagView
+from hashtags.api.views import TagTweetAPIView
 from tweets.views import TweetListView
-from .views import home
+from tweets.api.views import SearchTweetAPIView
+from .views import home, SearchView
 
 app_name = 'tweetme'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TweetListView.as_view(), name='home'),
+    path('search/', SearchView.as_view(), name='search'),
+    path('api/search/', SearchTweetAPIView.as_view(), name='search-api'),
     path('tweet/', include('tweets.urls', namespace='tweet')),
     path('api/tweet/', include('tweets.api.urls', namespace='tweet-api')),
-    path('', include('accounts.urls', namespace='profiles')),
     path('api/', include('accounts.api.urls', namespace='profiles-api')),
     path('tags/<hashtag>/', HashTagView.as_view(), name='hashtag'),
+    path('api/tags/<hashtag>', TagTweetAPIView.as_view(), name='tag-tweet-api'),
+    path('register/', UserRegisterView.as_view(), name='register'),
+    path('', include('django.contrib.auth.urls')),
+    path('', include('accounts.urls', namespace='profiles')),
     # path('api/profiles/', include('accounts.api.urls', namespace='profiles-api')),
 ]
 

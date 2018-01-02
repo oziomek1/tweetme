@@ -23,6 +23,7 @@ class TweetManager(models.Manager):
                                   parent=og_parent).filter(timestamp__year=timezone.now().year,
                                                            timestamp__month=timezone.now().month,
                                                            timestamp__day=timezone.now().day,
+                                                           reply=False,
                                                            )  # prevent from retweeting multiple times
         if qs.exists():
             return None
@@ -64,6 +65,21 @@ class Tweet(models.Model):
 
     def get_absolute_url(self):
         return reverse("tweet:detail",  kwargs={'pk': self.pk})
+
+    class Meta:
+        ordering = ['-timestamp']
+
+    def get_parent(self):
+        the_parent = self
+        if self.parent:
+            the_parent = self.parent
+        return the_parent
+
+    def get_children(self):
+        parent = self.get_parent()
+        qs = Tweet.objects.filter(parent=self)
+        qs_parent = Tweet.objects.filter(pk=parent.pk)
+        return qs | qs_parent
 
     # def clean(self, *args, **kwargs):
     #     text = self.text
